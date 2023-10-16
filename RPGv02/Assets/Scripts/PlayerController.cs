@@ -44,9 +44,9 @@ public class PlayerController : MonoBehaviourPun
         float mouseX = (Screen.width / 2) - Input.mousePosition.x;
 
         if (mouseX < 0)
-            weaponAnim.transform.parent.localScale = new Vector3(-1, 1, 1);
-        else
             weaponAnim.transform.parent.localScale = new Vector3(1, 1, 1);
+        else
+            weaponAnim.transform.parent.localScale = new Vector3(-1, 1, 1);
     }
 
     void Move()
