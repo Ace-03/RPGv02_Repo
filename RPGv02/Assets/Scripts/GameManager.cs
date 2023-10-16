@@ -6,9 +6,10 @@ public class GameManager : MonoBehaviourPun
 {
     [Header("Player")]
     public string playerPrefabPath;
+    public PlayerController[] players;
     public Transform[] spawnPoints;
     public float respawnTime;
-    public PlayerController[] players;
+    
 
     private int playersInGame;
 

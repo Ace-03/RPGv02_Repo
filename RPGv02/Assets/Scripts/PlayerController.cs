@@ -31,8 +31,27 @@ public class PlayerController : MonoBehaviourPun
     // local player
     public static PlayerController me;
 
+    [PunRPC]
+    public void Initialize(Player player)
+    {
+        id = player.ActorNumber;
+        photonPlayer = player;
+
+        GameManager.instance.players[id - 1] = this;
+
+        // initialize the health bar
+
+        if (player.IsLocal)
+            me = this;
+        else
+            rig.isKinematic = true;
+
+
+    }
+
     void Update()
     {
+        // only if the local player can control this player controller
         if (!photonView.IsMine)
             return;
 
@@ -111,34 +130,18 @@ public class PlayerController : MonoBehaviourPun
 
         Vector3 spawnPos = GameManager.instance.spawnPoints[Random.Range(0, GameManager.instance.spawnPoints.Length)].position;
         StartCoroutine(Spawn(spawnPos, GameManager.instance.respawnTime));
-
-        IEnumerator Spawn(Vector3 spawnPos, float timeToSpawn)
-        {
-            yield return new WaitForSeconds(timeToSpawn);
-
-            dead = false;
-            transform.position = spawnPos;
-            curHP = maxHP;
-            rig.isKinematic = false;
-
-            // update the health bar
-        }
     }
 
-    [PunRPC]
-    public void Initialize(Player player)
+    IEnumerator Spawn(Vector3 spawnPos, float timeToSpawn)
     {
-        id = player.ActorNumber;
-        photonPlayer = player;
+        yield return new WaitForSeconds(timeToSpawn);
 
-        // initialize the health bar
+        dead = false;
+        transform.position = spawnPos;
+        curHP = maxHP;
+        rig.isKinematic = false;
 
-        if (player.IsLocal)
-            me = this;
-        else
-            rig.isKinematic = true;
-
-        GameManager.instance.players[id - 1] = this;
+        // update the health bar
     }
 
     [PunRPC]
